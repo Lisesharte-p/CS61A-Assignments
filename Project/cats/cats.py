@@ -37,6 +37,13 @@ def pick(paragraphs, select, k):
     ''
     """
     # BEGIN PROBLEM 1
+    selected=[]
+    for prases in paragraphs:
+        if select(prases):
+            selected+=[prases]
+    if k>=len(selected):
+        return ''
+    return selected[k]
     "*** YOUR CODE HERE ***"
     # END PROBLEM 1
 
@@ -57,6 +64,16 @@ def about(subject):
     assert all([lower(x) == x for x in subject]), "subjects should be lowercase."
 
     # BEGIN PROBLEM 2
+    def about_or_not(s):
+        s=lower(s)
+        s=remove_punctuation(s)
+        words=split(s)
+        
+        for subjects in subject:
+            if subjects in words:
+                return True
+        return False
+    return about_or_not
     "*** YOUR CODE HERE ***"
     # END PROBLEM 2
 
@@ -87,7 +104,19 @@ def accuracy(typed, source):
     typed_words = split(typed)
     source_words = split(source)
     # BEGIN PROBLEM 3
+    length_typed=len(typed_words)
+    length_source=len(source_words)
+    if length_source==0 and length_typed==0:
+        return 100.0
+    if length_source==0 or length_typed==0:
+        return 0.0
+    
     "*** YOUR CODE HERE ***"
+    match=0
+    for i in range(min(length_typed,length_source)):
+        if typed_words[i]==source_words[i]:
+            match+=1
+    return match/length_typed*100
     # END PROBLEM 3
 
 
@@ -106,6 +135,9 @@ def wpm(typed, elapsed):
     assert elapsed > 0, "Elapsed time must be positive"
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    length=len(typed)
+    return length/5*60/elapsed
+    
     # END PROBLEM 4
 
 
@@ -167,6 +199,19 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    if typed_word in word_list:
+        return typed_word
+    diffs=[]
+    for words in word_list:
+        diffs+=[diff_function(typed_word,words,limit)]
+    min1=0
+    for i in range(1,len(diffs)):
+        if diffs[i]<diffs[min1]:
+            min1=i
+    if diffs[min1]>limit:
+        return typed_word
+    return word_list[min1]
+
     # END PROBLEM 5
 
 
@@ -193,7 +238,15 @@ def furry_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    #assert False, 'Remove this line'
+    if limit<0:
+        return limit+1
+    if len(typed)==0 or len(source)==0:
+        return max(len(typed),len(source))
+    if typed[0]!=source[0]:
+        return 1+furry_fixes(typed[1:],source[1:],limit-1)
+    else:
+        return furry_fixes(typed[1:],source[1:],limit)
     # END PROBLEM 6
 
 
