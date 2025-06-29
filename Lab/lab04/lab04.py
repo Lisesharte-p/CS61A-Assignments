@@ -29,10 +29,11 @@ def buy(fruits_to_buy, prices, total_amount):
             print(cart)
         elif fruits and amount > 0:
             fruit = fruits[0]
-            price = ____
-            for k in ____:
+            price = prices[fruit]
+            for k in range(1,amount//price+1):
                 # Hint: The display function will help you add fruit to the cart.
-                add(____, ____, ____)
+                fruit_name=fruit if k>1 else fruit[:len(fruit)-1]
+                add(fruits[1:], amount-k*price,cart+f'[{k} {fruit_name}]')
     add(fruits_to_buy, total_amount, '')
 
 
@@ -67,6 +68,9 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    dis_lat=(get_lat(city_a)-get_lat(city_b))
+    dis_lon=(get_lon(city_a)-get_lon(city_b))
+    return sqrt(dis_lat*dis_lat+dis_lon*dis_lon)
 
 def closer_city(lat, lon, city_a, city_b):
     """
@@ -84,6 +88,8 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    virtual_city=make_city('v_c',lat,lon)
+    return get_name(city_a) if distance(city_a,virtual_city)<=distance(city_b,virtual_city) else get_name(city_b)
 
 def check_city_abstraction():
     """
