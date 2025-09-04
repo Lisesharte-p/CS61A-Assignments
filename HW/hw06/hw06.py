@@ -50,13 +50,18 @@ class VendingMachine:
     def __init__(self, product, price):
         """Set the product and its price, as well as other instance attributes."""
         "*** YOUR CODE HERE ***"
-
+        self.product=product
+        self.price=price
+        self.stock=0
+        self.fund=0
     def restock(self, n):
         """Add n to the stock and return a message about the updated stock level.
 
         E.g., Current candy stock: 3
         """
         "*** YOUR CODE HERE ***"
+        self.stock+=n
+        return f'Current {self.product} stock: {self.stock}'
 
     def add_funds(self, n):
         """If the machine is out of stock, return a message informing the user to restock
@@ -69,6 +74,11 @@ class VendingMachine:
         E.g., Current balance: $4
         """
         "*** YOUR CODE HERE ***"
+        if self.stock==0:
+            return f'Nothing left to vend. Please restock. Here is your ${n}.'
+        else:
+            self.fund+=n
+            return f'Current balance: ${self.fund}'
 
     def vend(self):
         """Dispense the product if there is sufficient stock and funds and
@@ -82,6 +92,24 @@ class VendingMachine:
               Please add $3 more funds.
         """
         "*** YOUR CODE HERE ***"
+        if self.fund>=self.price and self.fund==self.price:
+            self.stock-=(self.fund//self.price)
+            change=self.fund
+            self.fund=0
+            return f'Here is your {self.product}.'
+        if self.fund>=self.price and self.stock>=self.fund//self.price:
+            self.stock-=(self.fund//self.price)
+            change=self.fund
+            self.fund=0
+            return f'Here is your {self.product} and ${change%self.price} change.'
+        else:
+            if self.stock==0:
+                return f'Nothing left to vend. Please restock.'
+            elif self.fund>=self.price and self.stock<self.fund//self.price:
+                return f'Here is your {self.product} and ${self.fund-self.stock*self.price} change.'
+            elif self.fund<self.price:
+                return f'Please add ${self.price-self.fund} more funds.'
+
 
 
 def store_digits(n):
@@ -104,6 +132,9 @@ def store_digits(n):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
     "*** YOUR CODE HERE ***"
+    
+    def mk_list(n):
+        return f'Link({n%10})'
 
 
 def deep_map_mut(func, s):
