@@ -133,8 +133,12 @@ def store_digits(n):
     """
     "*** YOUR CODE HERE ***"
     
-    def mk_list(n):
-        return f'Link({n%10})'
+    result = Link.empty
+    while n > 0:
+        result = Link(n % 10, result)
+        n //= 10
+    return result
+        
 
 
 def deep_map_mut(func, s):
@@ -157,6 +161,14 @@ def deep_map_mut(func, s):
     <9 <16> 25 36>
     """
     "*** YOUR CODE HERE ***"
+    if s is Link.empty:
+        return None
+    elif isinstance(s.first,Link):
+        deep_map_mut(func,s.first)
+    else:
+        s.first=func(s.first)
+    deep_map_mut(func,s.rest)
+
 
 
 def two_list(vals, counts):
@@ -178,6 +190,16 @@ def two_list(vals, counts):
     Link(1, Link(1, Link(3, Link(3, Link(2)))))
     """
     "*** YOUR CODE HERE ***"
+    s=[]
+    for i in range(len(vals)):
+        for j in range(counts[i]):
+            s+=[vals[i]]
+    def mk_list(m):
+        if len(m)==1:
+            return Link(m[0])
+        else:
+            return Link(m[0],mk_list(m[1:]))
+    return mk_list(s)
 
 
 class Link:
